@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Pin on Boston</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .map-container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Blank_US_map_borders.svg/1280px-Blank_US_map_borders.svg.png');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #000;
+        }
+        .pin {
+            position: absolute;
+            top: 25%;
+            left: 85%;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .pin::after {
+            content: 'Boston';
+            position: absolute;
+            bottom: 50px;
+            left: -30px;
+            width: 45px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 3px;
+            display: none;
+            white-space: normal;
+            text-align: center;
+            z-index: 10;
+        }
+        .pin:hover::after {
+            display: block;
+        }
+        .pin .info {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: -120px;
+            width: 220px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 3px;
+            z-index: 10;
+        }
+        .pin:hover .info {
+            display: block;
+        }
+        .info h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .info img {
+            width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <div class="pin">
+            <div class="info">
+                <h3>Boston</h3>
+                <p>We visited the Freedom Trail, explored the historic sites, and enjoyed the local cuisine.</p>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Skyline_of_Boston%2C_Massachusetts.jpg/2880px-Skyline_of_Boston%2C_Massachusetts.jpg" alt="Boston">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

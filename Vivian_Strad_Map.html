@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Pins on Boston and LA</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .map-container {
+            position: relative;
+            width: 80%;
+            max-width: 1100px;
+            aspect-ratio: 11/7;
+            background-image: url('usa_map.jpg');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #000;
+        }
+        .pin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .pin.boston {
+            top: 27%;
+            left: 93%;
+        }
+        .pin.los-angeles {
+            top: 60%;
+            left: 9%;
+        }
+        .pin.seattle {
+            top: 5%;
+            left: 9%;
+        }
+        .pin.santa-barbara {
+            top: 58%;
+            left: 7%;
+        }
+        .pin.monterey {
+            top: 47%;
+            left: 2.5%;
+        }
+        .pin.san-francisco {
+            top: 45%;
+            left: 2.3%;
+        }
+        .pin.portland {
+            top: 14.5%;
+            left: 6.5%;
+        }
+        .pin.milwaukee {
+            top: 31.5%;
+            left: 64%;
+        }
+        .pin.denver {
+            top: 43%;
+            left: 35%;
+        }
+        .pin.new-york-city {
+            top: 34%;
+            left: 89%;
+        }
+        .pin.north-potomac {
+            top: 41.5%;
+            left: 84%;
+        }
+        .pin.las-vegas {
+            top: 52.5%;
+            left: 14.5%;
+        }
+        .pin.fort-bragg {
+            top: 35.5%;
+            left: 1%;
+        }
+        .pin.willow-beach {
+            top: 54%;
+            left: 15.5%;
+        }
+        .pin.leavenworth {
+            top: 7%;
+            left: 12%;
+        }
+        .pin.reedsport {
+            top: 21%;
+            left: 3%;
+        }
+        .pin.yachats {
+            top: 20%;
+            left: 3.5%;
+        }
+
+
+
+        .pin::after {
+            content: attr(data-location);
+            position: absolute;
+            bottom: 20px;
+            left: -30px;
+            width: 60px;
+            padding: 5px;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 3px;
+            display: none;
+            white-space: normal;
+            text-align: center;
+            z-index: 10;
+        }
+        .pin:hover::after {
+            display: block;
+        }
+        .info {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 3px;
+            z-index: 10;
+        }
+        .info h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .info img {
+            width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .navigation-buttons button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .navigation-buttons button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <div class="pin boston" data-location="Boston" onclick="toggleInfo('boston')"></div>
+        <div class="pin los-angeles" data-location="Los Angeles" onclick="toggleInfo('los-angeles')"></div>
+        <div class="pin seattle" data-location="Seattle" onclick="toggleInfo('seattle')"></div>
+        <div class="pin santa-barbara" data-location="Santa Barbara" onclick="toggleInfo('santa-barbara')"></div>
+        <div class="pin monterey" data-location="Monterey" onclick="toggleInfo('monterey')"></div>
+        <div class="pin san-francisco" data-location="San Francisco" onclick="toggleInfo('san-francisco')"></div>
+        <div class="pin portland" data-location="Portland" onclick="toggleInfo('portland')"></div>
+        <div class="pin milwaukee" data-location="Milwaukee" onclick="toggleInfo('milwaukee')"></div>
+        <div class="pin denver" data-location="Denver" onclick="toggleInfo('denver')"></div>
+        <div class="pin new-york-city" data-location="New York City" onclick="toggleInfo('new-york-city')"></div>
+        <div class="pin north-potomac" data-location="North Potomac" onclick="toggleInfo('north-potomac')"></div>
+        <div class="pin las-vegas" data-location="Las Vegas" onclick="toggleInfo('las-vegas')"></div>
+        <div class="pin fort-bragg" data-location="Fort Bragg" onclick="toggleInfo('fort-bragg')"></div>
+        <div class="pin willow-beach" data-location="Willow Beach" onclick="toggleInfo('willow-beach')"></div>
+        <div class="pin leavenworth" data-location="Leavenworth" onclick="toggleInfo('leavenworth')"></div>
+        <div class="pin reedsport" data-location="Reedsport" onclick="toggleInfo('reedsport')"></div>
+        <div class="pin yachats" data-location="Yachats" onclick="toggleInfo('yachats')"></div>
+        <div class="info" id="infoBox">
+            <h3 id="infoTitle">Boston</h3>
+            <p id="infoDescription">We visited the Freedom Trail, explored the historic sites, and enjoyed the local cuisine.</p>
+            <div class="navigation-buttons">
+                <button id="prevButton" onclick="prevImage()">Previous</button>
+                <button id="nextButton" onclick="nextImage()">Next</button>
+            </div>
+            <img id="infoImage" src='boston1.jpg' alt="Boston">
+        </div>
+    </div>
+    <script>
+        let currentImageIndex = 0;
+        const images = {
+            boston: ['boston1.jpg', 'boston2.jpg', 'boston3.jpg', 'boston4.jpg', 'boston5.jpg', 'boston6.jpg'],
+            'los-angeles': ['losangeles/1la.jpg', 'losangeles/2la.jpg','losangeles/3la.jpg','losangeles/4la.jpg','losangeles/5la.jpg',
+                'losangeles/6la.jpg','losangeles/7la.jpg','losangeles/8la.jpg','losangeles/9la.jpg','losangeles/10la.jpg',
+                'losangeles/11la.jpg','losangeles/12la.jpg','losangeles/13la.jpg','losangeles/14la.jpg','losangeles/15la.jpg',
+                'losangeles/16la.jpg','losangeles/17la.jpg','losangeles/18la.jpg','losangeles/19la.jpg','losangeles/20la.jpg',
+                'losangeles/21la.jpg','losangeles/22la.jpg','losangeles/23la.jpg','losangeles/24la.jpg','losangeles/25la.jpg',
+                'losangeles/26la.jpg','losangeles/27la.jpg','losangeles/28la.jpg','losangeles/29la.jpg','losangeles/30la.jpg',
+                'losangeles/31la.jpg','losangeles/32la.jpg','losangeles/33la.jpg','losangeles/34la.jpg','losangeles/35la.jpg',
+                'losangeles/36la.jpg','losangeles/37la.jpg','losangeles/38la.jpg','losangeles/39la.jpg','losangeles/40la.jpg',
+                'losangeles/41la.jpg','losangeles/42la.jpg','losangeles/43la.jpg','losangeles/44la.jpg','losangeles/45la.jpg',
+                'losangeles/46la.jpg','losangeles/47la.jpg','losangeles/48la.jpg','losangeles/49la.jpg',
+                'losangeles/51la.jpg','losangeles/52la.jpg','losangeles/53la.jpg','losangeles/54la.jpg','losangeles/55la.jpg',
+                'losangeles/56la.jpg','losangeles/57la.jpg','losangeles/58la.jpg','losangeles/59la.jpg','losangeles/60la.jpg',
+                'losangeles/61la.jpg','losangeles/62la.jpg','losangeles/63la.jpg','losangeles/64la.jpg','losangeles/65la.jpg',
+                'losangeles/66la.jpg','losangeles/67la.jpg','losangeles/68la.jpg','losangeles/69la.jpg','losangeles/70la.jpg',
+                'losangeles/71la.jpg','losangeles/72la.jpg','losangeles/73la.jpg','losangeles/74la.jpg','losangeles/75la.jpg',
+                'losangeles/76la.jpg','losangeles/77la.jpg','losangeles/78la.jpg','losangeles/79la.jpg','losangeles/80la.jpg',
+                'losangeles/81la.jpg','losangeles/82la.jpg','losangeles/83la.jpg','losangeles/84la.jpg','losangeles/85la.jpg',
+                'losangeles/86la.jpg','losangeles/87la.jpg','losangeles/88la.jpg','losangeles/89la.jpg','losangeles/90la.jpg',
+                'losangeles/91la.jpg','losangeles/92la.jpg','losangeles/93la.jpg','losangeles/94la.jpg','losangeles/95la.jpg',
+                'losangeles/96la.jpg','losangeles/97la.jpg','losangeles/98la.jpg','losangeles/99la.jpg','losangeles/100la.jpg',
+                'losangeles/101la.jpg','losangeles/102la.jpg','losangeles/103la.jpg','losangeles/104la.jpg'
+            ],
+            seattle: ['seattle/s1.jpg', 'seattle/s2.jpg', 'seattle/s3.jpg', 'seattle/s4.jpg', 'seattle/s5.jpg', 'seattle/s6.jpg',
+                'seattle/s7.jpg', 'seattle/s8.jpg', 'seattle/s9.jpg', 'seattle/s10.jpg'
+            ],
+            'santa-barbara': ['santabarbara/sb1.jpg', 'santabarbara/sb2.jpg'],
+            monterey: ['monterey/m1.jpg', 'monterey/m2.jpg', 'monterey/m3.jpg', 'monterey/m4.jpg', 'monterey/m5.jpg', 'monterey/m6.jpg'],
+            'san-francisco': ['sanfrancisco/sf1.jpg', 'sanfrancisco/sf2.jpg', 'sanfrancisco/sf3.jpg', 'sanfrancisco/sf4.jpg', 'sanfrancisco/sf5.jpg'],
+            portland: ['portland/p1.jpg', 'portland/p2.jpg','portland/p3.jpg','portland/p4.jpg','portland/p5.jpg'],
+            milwaukee: ['milwaukee/m1.jpg','milwaukee/m2.jpg','milwaukee/m3.jpg','milwaukee/m4.jpg','milwaukee/m5.jpg','milwaukee/m6.jpg',
+                'milwaukee/m7.jpg','milwaukee/m8.jpg','milwaukee/m9.jpg','milwaukee/m10.jpg','milwaukee/m11.jpg','milwaukee/m12.jpg',
+                'milwaukee/m13.jpg','milwaukee/m14.jpg','milwaukee/m15.jpg','milwaukee/m16.jpg','milwaukee/m17.jpg','milwaukee/m18.jpg',
+                'milwaukee/m19.jpg','milwaukee/m20.jpg','milwaukee/m21.jpg','milwaukee/m22.jpg'
+            ],
+            denver: ['denver/d1.jpg', 'denver/d2.jpg', 'denver/d3.jpg', 'denver/d4.jpg', 'denver/d5.jpg'],
+            'new-york-city': ['newyorkcity/1ny.jpg', 'newyorkcity/2ny.jpg', 'newyorkcity/3ny.jpg', 'newyorkcity/4ny.jpg', 
+                'newyorkcity/5ny.jpg', 'newyorkcity/6ny.jpg', 'newyorkcity/7ny.jpg', 'newyorkcity/8ny.jpg', 
+                'newyorkcity/10ny.jpg', 'newyorkcity/11ny.jpg', 'newyorkcity/12ny.jpg', 'newyorkcity/13ny.jpg', 'newyorkcity/14ny.jpg',
+                'newyorkcity/15ny.jpg', 'newyorkcity/16ny.jpg', 'newyorkcity/17ny.jpg', 'newyorkcity/18ny.jpg', 'newyorkcity/19ny.jpg',
+                'newyorkcity/21ny.jpg', 'newyorkcity/22ny.jpg', 'newyorkcity/23ny.jpg', 'newyorkcity/24ny.jpg', 'newyorkcity/25ny.jpg',
+                'newyorkcity/26ny.jpg', 'newyorkcity/27ny.jpg', 'newyorkcity/28ny.jpg', 'newyorkcity/29ny.jpg', 'newyorkcity/30ny.jpg',
+                'newyorkcity/31ny.jpg', 'newyorkcity/32ny.jpg', 'newyorkcity/33ny.jpg', 'newyorkcity/34ny.jpg', 'newyorkcity/35ny.jpg',
+                'newyorkcity/36ny.jpg', 'newyorkcity/37ny.jpg', 'newyorkcity/38ny.jpg', 'newyorkcity/39ny.jpg', 'newyorkcity/40ny.jpg',
+                'newyorkcity/41ny.jpg'
+            ],
+            'north-potomac': ['northpotomac/np1.jpg','northpotomac/np2.jpg','northpotomac/np3.jpg','northpotomac/np4.jpg','northpotomac/np5.jpg',
+                'northpotomac/np6.jpg','northpotomac/np7.jpg','northpotomac/np8.jpg','northpotomac/np9.jpg'
+            ],
+            'las-vegas': ['lasvegas/lv1.jpg','lasvegas/lv2.jpg','lasvegas/lv3.jpg','lasvegas/lv4.jpg','lasvegas/lv5.jpg','lasvegas/lv6.jpg',
+                'lasvegas/lv7.jpg','lasvegas/lv8.jpg','lasvegas/lv9.jpg','lasvegas/lv10.jpg','lasvegas/lv11.jpg','lasvegas/lv12.jpg',
+                'lasvegas/lv13.jpg','lasvegas/lv14.jpg','lasvegas/lv15.jpg','lasvegas/lv16.jpg'
+            ],
+            'fort-bragg': ['fortbragg/fb1.jpg', 'fortbragg/fb2.jpg', 'fortbragg/fb3.jpg', 'fortbragg/fb4.jpg'],
+            'willow-beach': ['willowbeach/wb1.jpg', 'willowbeach/wb2.jpg','willowbeach/wb3.jpg','willowbeach/wb4.jpg'],
+            leavenworth: ['leavenworth/l1.jpg', 'leavenworth/l2.jpg', 'leavenworth/l3.jpg', 'leavenworth/l4.jpg'],
+            reedsport: ['reedsport/r1.jpg', 'reedsport/r2.jpg', 'reedsport/r3.jpg', 'reedsport/r4.jpg', 'reedsport/r5.jpg'],
+            yachats: ['yachats/y1.jpg', 'yachats/y2.jpg', 'yachats/y3.jpg', 'yachats/y4.jpg', 'yachats/y5.jpg', 'yachats/y6.jpg', ]
+        };
+        const descriptions = {
+            boston: "We visited the Freedom Trail, explored the historic sites, and enjoyed the local cuisine.",
+            'los-angeles': "We visited Hollywood, enjoyed the beaches, and explored the vibrant nightlife.",
+            seattle: "We visited here here and here",
+            'santa-barbara': "We visited here here and here",
+            monterey: "We visited here here and here",
+            'san-francisco': "We visited here here and here",
+            portland: "We visited here here and here",
+            milwaukee: "We visited here here and here",
+            denver: "We visited here here and here",
+            'new-york-city': "We visited here here and here",
+            'north-potomac': "We visited here here and here",
+            'las-vegas': "We visited here here and here",
+            'fort-bragg' : "We visited here here and here",
+            'willow-beach': "We visited here here and here",
+            leavenworth: "We visited here here and here",
+            reedsport: "We visited here here and here",
+            yachats: "We visited here here and here"
+        };
+        let currentLocation = 'boston';
+
+        function toggleInfo(location) {
+            const infoBox = document.getElementById('infoBox');
+            const pin = document.querySelector(`.pin.${location}`);
+            const pinRect = pin.getBoundingClientRect();
+            const mapRect = document.querySelector('.map-container').getBoundingClientRect();
+
+            currentLocation = location;
+            currentImageIndex = 0;
+            updateContent();
+
+            infoBox.style.top = `${pinRect.bottom - mapRect.top + 10}px`;
+            infoBox.style.left = `${pinRect.left - mapRect.left}px`;
+            infoBox.style.transform = 'translateX(-50%)';
+
+            if (infoBox.style.display === 'block') {
+                infoBox.style.display = 'none';
+            } else {
+                infoBox.style.display = 'block';
+                updateButtons();
+            }
+        }
+
+        function prevImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateImage();
+                updateButtons();
+            }
+        }
+
+        function nextImage() {
+            if (currentImageIndex < images[currentLocation].length - 1) {
+                currentImageIndex++;
+                updateImage();
+                updateButtons();
+            }
+        }
+
+        function updateImage() {
+            const infoImage = document.getElementById('infoImage');
+            infoImage.src = images[currentLocation][currentImageIndex];
+        }
+
+        function updateButtons() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            prevButton.disabled = currentImageIndex === 0;
+            nextButton.disabled = currentImageIndex === images[currentLocation].length - 1;
+        }
+
+        function updateContent() {
+            const infoTitle = document.getElementById('infoTitle');
+            const infoDescription = document.getElementById('infoDescription');
+            const infoImage = document.getElementById('infoImage');
+
+            // Replace hyphens with spaces and capitalize each word
+            const formattedLocation = currentLocation.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+    
+            infoTitle.textContent = formattedLocation;
+            infoDescription.textContent = descriptions[currentLocation];
+            infoImage.src = images[currentLocation][currentImageIndex];
+        }
+    </script>
+</body>
+</html>
+
